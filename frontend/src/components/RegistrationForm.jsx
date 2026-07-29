@@ -70,6 +70,7 @@ const RegistrationForm = () => {
                     />
                 </div>
                 <button 
+                    id="register-btn-v2"
                     type="submit" 
                     disabled={isSubmitting}
                     className="w-full bg-blue-500/80 backdrop-blur-sm text-white p-3 rounded-lg font-medium shadow-lg hover:bg-blue-600/80 transition disabled:opacity-50 disabled:cursor-not-allowed mt-4"
