@@ -2,24 +2,24 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-07-29T19:39:44 IST" name="TechCart Test Suite" finished-at="2026-07-29T19:39:56 IST" duration-ms="11612">
+  <suite started-at="2026-07-29T23:35:21 IST" name="TechCart Test Suite" finished-at="2026-07-29T23:35:29 IST" duration-ms="8306">
     <groups>
     </groups>
-    <test started-at="2026-07-29T19:39:44 IST" name="E2E Smoke Tests" finished-at="2026-07-29T19:39:56 IST" duration-ms="11612">
+    <test started-at="2026-07-29T23:35:21 IST" name="E2E Smoke Tests" finished-at="2026-07-29T23:35:29 IST" duration-ms="8306">
       <class name="com.techcart.tests.LoginTest">
-        <test-method is-config="true" signature="setupSuite()[pri:0, instance:com.techcart.tests.LoginTest@957e06]" started-at="2026-07-29T19:39:42 IST" name="setupSuite" finished-at="2026-07-29T19:39:44 IST" duration-ms="1466" status="PASS">
+        <test-method is-config="true" signature="setupSuite()[pri:0, instance:com.techcart.tests.LoginTest@957e06]" started-at="2026-07-29T23:35:20 IST" name="setupSuite" finished-at="2026-07-29T23:35:21 IST" duration-ms="1427" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setupSuite -->
-        <test-method is-config="true" signature="setUp()[pri:0, instance:com.techcart.tests.LoginTest@957e06]" started-at="2026-07-29T19:39:44 IST" name="setUp" finished-at="2026-07-29T19:39:49 IST" duration-ms="5224" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.techcart.tests.LoginTest@957e06]" started-at="2026-07-29T23:35:21 IST" name="setUp" finished-at="2026-07-29T23:35:25 IST" duration-ms="3615" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method signature="testRegistrationPageNavigation()[pri:0, instance:com.techcart.tests.LoginTest@957e06]" started-at="2026-07-29T19:39:49 IST" name="testRegistrationPageNavigation" finished-at="2026-07-29T19:39:55 IST" duration-ms="5185" status="PASS">
+        <test-method signature="testRegistrationPageNavigation()[pri:0, instance:com.techcart.tests.LoginTest@957e06]" started-at="2026-07-29T23:35:25 IST" name="testRegistrationPageNavigation" finished-at="2026-07-29T23:35:28 IST" duration-ms="2911" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- testRegistrationPageNavigation -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.techcart.tests.LoginTest@957e06]" started-at="2026-07-29T19:39:55 IST" name="tearDown" finished-at="2026-07-29T19:39:56 IST" duration-ms="1015" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.techcart.tests.LoginTest@957e06]" started-at="2026-07-29T23:35:28 IST" name="tearDown" finished-at="2026-07-29T23:35:29 IST" duration-ms="1663" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
