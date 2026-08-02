@@ -9,7 +9,7 @@ describe('Checkout Flow', () => {
     cy.contains('Our Collection').should('be.visible');
 
     // Add Smartphone to the cart
-    cy.contains('.group', 'Smartphone').within(() => {
+    cy.contains('.group1', 'Smartphone').within(() => {
       cy.contains('Add to Cart').click();
     });
 
