@@ -1,0 +1,7 @@
+A QA course application is useless if it works perfectly! You must intentionally code these exact flaws and rules into TechCart so your students have something to catch during the videos:
+The 500 Internal Server Error (Database Crash): When a user registers with an email that already exists (e.g., existinguser@email.com), the Node.js backend must fail to handle the MongoDB duplicate key error and throw a 500 Internal Server Error to the browser console.
+The Checkout Math Bug: The calculateTotal(price, tax) function must contain an intentional arithmetic bug where it subtracts the tax instead of adding it (e.g., $100 - $15 = $85). You use this to demonstrate Unit Testing (Jest) catching logic flaws.
+The Unstable UI Element: The HTML ID on the checkout button must change (e.g., from #checkout-btn-v1 to #checkout-btn-v2). You will use this in the automation modules to show how rigid scripts crash when developers change the UI, teaching "Maintenance Overhead."
+Promo Code Logic: The system must accept the code SAVE10 for a 10% discount, but it must throw a 400 Bad Request if the code is expired, and reject the code if the cart total is under $20.
+Free Shipping Rule: Shipping should be calculated as $10, unless the user is a Premium Member OR the cart total is > $50, in which case it is free. (You use this for Decision Table testing).
+Boundary Limits: A strict order limit where a user can only buy a maximum of 10 identical items (used for Boundary Value Analysis testing).

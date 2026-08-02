@@ -2,22 +2,43 @@ import { useState, useEffect } from 'react';
 
 const ProductList = ({ addToCart }) => {
     const [products, setProducts] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('all');
 
     useEffect(() => {
-        // Fetch products from our mock backend
-        fetch('http://localhost:5000/api/products')
+        const url = selectedCategory === 'all' 
+            ? 'http://localhost:5000/api/products' 
+            : `http://localhost:5000/api/products?category=${selectedCategory}`;
+        fetch(url)
             .then(res => res.json())
             .then(data => setProducts(data))
             .catch(err => console.error("Error fetching products:", err));
-    }, []);
+    }, [selectedCategory]);
 
     return (
         <div className="max-w-6xl mx-auto mt-12 text-white px-4 pb-20">
             
             {/* Minimalist Hero Section for Products */}
-            <div className="text-center mb-16">
+            <div className="text-center mb-10">
                 <h2 className="text-5xl font-light tracking-tight mb-4 text-white">Our Collection</h2>
                 <p className="text-xl text-blue-200 font-light max-w-2xl mx-auto">Discover premium technology crafted to elevate your everyday experience.</p>
+            </div>
+
+            {/* Category Filter buttons */}
+            <div className="flex justify-center gap-4 mb-12">
+                {['all', 'electronics', 'accessories'].map(cat => (
+                    <button 
+                        key={cat}
+                        id={`filter-btn-${cat}`}
+                        onClick={() => setSelectedCategory(cat)}
+                        className={`px-6 py-2 rounded-full font-medium tracking-wide border transition-all duration-300 capitalize ${
+                            selectedCategory === cat 
+                            ? 'bg-blue-500 border-blue-400 text-white shadow-lg shadow-blue-500/20' 
+                            : 'bg-white/5 border-white/20 text-white/70 hover:bg-white/10 hover:text-white'
+                        }`}
+                    >
+                        {cat}
+                    </button>
+                ))}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -25,6 +46,15 @@ const ProductList = ({ addToCart }) => {
                     <div key={product.id} className="group flex flex-col bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-blue-500/20 hover:bg-white/20">
                         {/* Image Container */}
                         <div className="relative h-64 w-full bg-black/20 flex items-center justify-center p-6 overflow-hidden">
+                            {/* Stock Indicator */}
+                            <div className="absolute top-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium tracking-wide border border-white/10 z-10">
+                                {product.inStock ? (
+                                    <span className="text-green-400">● In Stock</span>
+                                ) : (
+                                    <span className="text-red-400">● Out of Stock</span>
+                                )}
+                            </div>
+
                             {product.image ? (
                                 <img src={product.image} alt={product.name} className="w-full h-full object-contain filter drop-shadow-2xl transition-transform duration-500 group-hover:scale-110" />
                             ) : (
@@ -42,12 +72,23 @@ const ProductList = ({ addToCart }) => {
                             
                             <button 
                                 onClick={() => addToCart(product)}
-                                className="w-full bg-blue-500/80 backdrop-blur-sm text-white border border-blue-400/50 px-4 py-3 rounded-xl hover:bg-blue-400 hover:scale-[1.02] active:scale-95 transition-all shadow-lg font-medium tracking-wide flex items-center justify-center gap-2"
+                                disabled={!product.inStock}
+                                className={`w-full backdrop-blur-sm text-white border px-4 py-3 rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg font-medium tracking-wide flex items-center justify-center gap-2 ${
+                                    product.inStock 
+                                    ? 'bg-blue-500/80 border-blue-400/50 hover:bg-blue-400' 
+                                    : 'bg-white/5 border-white/10 text-white/30 cursor-not-allowed hover:scale-100'
+                                }`}
                             >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                </svg>
-                                Add to Cart
+                                {product.inStock ? (
+                                    <>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        Add to Cart
+                                    </>
+                                ) : (
+                                    'Out of Stock'
+                                )}
                             </button>
                         </div>
                     </div>

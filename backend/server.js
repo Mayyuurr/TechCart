@@ -50,21 +50,66 @@ app.post('/api/register', async (req, res) => {
 });
 
 // A simple product listing endpoint
+const productsList = [
+    { id: 1, productId: 1, name: 'Smartphone', price: 699, category: 'electronics', inStock: true, description: 'Latest model smartphone', image: '/images/smartphone.png' },
+    { id: 2, productId: 2, name: 'Laptop', price: 1299, category: 'electronics', inStock: true, description: 'High performance laptop', image: '/images/laptop.png' },
+    { id: 3, productId: 3, name: 'Wireless Earbuds', price: 149, category: 'accessories', inStock: true, description: 'Noise cancelling earbuds', image: '/images/earbuds.png' },
+    { id: 4, productId: 4, name: 'Smartwatch', price: 299, category: 'accessories', inStock: false, description: 'Fitness tracking smartwatch', image: '/images/smartwatch.png' }
+];
+
 app.get('/api/products', (req, res) => {
-    res.json([
-        { id: 1, name: 'Smartphone', price: 699, description: 'Latest model smartphone', image: '/images/smartphone.png' },
-        { id: 2, name: 'Laptop', price: 1299, description: 'High performance laptop', image: '/images/laptop.png' },
-        { id: 3, name: 'Wireless Earbuds', price: 149, description: 'Noise cancelling earbuds', image: '/images/earbuds.png' },
-        { id: 4, name: 'Smartwatch', price: 299, description: 'Fitness tracking smartwatch', image: '/images/smartwatch.png' }
-    ]);
+    const { category } = req.query;
+    let filteredProducts = productsList;
+    if (category) {
+        filteredProducts = productsList.filter(p => p.category.toLowerCase() === category.toLowerCase());
+    }
+    res.json(filteredProducts);
+});
+
+// User Registration API
+app.post('/api/users', (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+    }
+    res.status(201).json({
+        message: 'User created successfully',
+        user: {
+            id: 'mock-user-id',
+            email
+        }
+    });
+});
+
+// Update User API
+app.put('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    const { password, email } = req.body;
+    res.status(200).json({
+        message: 'User updated successfully',
+        user: {
+            id,
+            email,
+            password
+        }
+    });
+});
+
+// Shopping Cart API
+app.delete('/api/cart/:id', (req, res) => {
+    const { id } = req.params;
+    res.status(200).json({
+        message: `Item with id ${id} removed from cart`
+    });
 });
 
 // Checkout logic 
 const { calculateTotal } = require('./utils/mathLogic');
 const { calculateShipping } = require('./utils/shippingLogic');
+const { applyPromoCode } = require('./utils/promo');
 
 app.post('/api/checkout', (req, res) => {
-    const { items, isPremiumMember } = req.body;
+    const { items, isPremiumMember, promoCode } = req.body;
     
     // Scenario 3: Order Quantity Boundaries. User allowed to buy max 10 identical items.
     for (let item of items) {
@@ -74,19 +119,32 @@ app.post('/api/checkout', (req, res) => {
     }
 
     let rawTotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    const tax = rawTotal * 0.1; // 10% tax
+    
+    let discountedTotal = rawTotal;
+    let discount = 0;
+    if (promoCode) {
+        try {
+            discountedTotal = applyPromoCode(rawTotal, promoCode);
+            discount = rawTotal - discountedTotal;
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+    }
+
+    const tax = discountedTotal * 0.1; // 10% tax
     
     // Scenario 2 Bug here
-    const totalWithTax = calculateTotal(rawTotal, tax);
+    const totalWithTax = calculateTotal(discountedTotal, tax);
     
     // Scenario 4 
-    const shipping = calculateShipping(isPremiumMember, rawTotal);
+    const shipping = calculateShipping(isPremiumMember, discountedTotal);
     
     const finalTotal = totalWithTax + shipping;
 
     res.json({
         message: 'Checkout successful',
         rawTotal,
+        discount,
         tax,
         shipping,
         finalTotal
