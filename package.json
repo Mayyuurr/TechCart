@@ -1,0 +1,9 @@
+{
+  "name": "techcart-workspace",
+  "version": "1.0.0",
+  "description": "Root workspace workspace runner for TechCart QA project",
+  "scripts": {
+    "build": "npm run build --prefix frontend",
+    "start": "node backend/server.js"
+  }
+}

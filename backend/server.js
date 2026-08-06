@@ -52,7 +52,7 @@ app.post('/api/register', async (req, res) => {
 // A simple product listing endpoint
 const productsList = [
     { id: 1, productId: 1, name: 'Smartphone', price: 699, category: 'electronics', inStock: true, description: 'Latest model smartphone', image: '/images/smartphone.png' },
-    { id: 2, productId: 2, name: 'Laptop', price: 1299, category: 'electronics', inStock: true, description: 'High performance laptop', image: '/images/laptop.png' },
+    { id: 9942, productId: 9942, name: 'Laptop', price: 1299, category: 'electronics', inStock: true, description: 'High performance laptop', image: '/images/laptop.png' },
     { id: 3, productId: 3, name: 'Wireless Earbuds', price: 149, category: 'accessories', inStock: true, description: 'Noise cancelling earbuds', image: '/images/earbuds.png' },
     { id: 4, productId: 4, name: 'Smartwatch', price: 299, category: 'accessories', inStock: false, description: 'Fitness tracking smartwatch', image: '/images/smartwatch.png' }
 ];
@@ -64,6 +64,15 @@ app.get('/api/products', (req, res) => {
         filteredProducts = productsList.filter(p => p.category.toLowerCase() === category.toLowerCase());
     }
     res.json(filteredProducts);
+});
+
+app.get('/api/products/:id', (req, res) => {
+    const productId = parseInt(req.params.id, 10);
+    const product = productsList.find(p => p.id === productId);
+    if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+    }
+    res.json(product);
 });
 
 // User Registration API
@@ -149,6 +158,15 @@ app.post('/api/checkout', (req, res) => {
         shipping,
         finalTotal
     });
+});
+
+const path = require('path');
+// Serve static files from the compiled frontend directory
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// Fallback to index.html for any frontend SPA routes
+app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 
 app.listen(port, () => {

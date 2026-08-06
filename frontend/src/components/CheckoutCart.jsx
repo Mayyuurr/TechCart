@@ -34,14 +34,25 @@ const CheckoutCart = ({ cart, setCart, isPremiumMember }) => {
     };
 
     const handleApplyPromo = () => {
-        if (promoInput.trim().toUpperCase() === 'SAVE10') {
-            setPromoDiscount(0.1);
-            setAppliedPromo('SAVE10');
-            setError(null);
+        const code = promoInput.trim().toUpperCase();
+        if (code === 'SAVE10') {
+            if (subtotal < 20) {
+                setError('Promo code SAVE10 cannot be applied to orders under $20');
+                setPromoDiscount(0);
+                setAppliedPromo('');
+            } else {
+                setPromoDiscount(0.1);
+                setAppliedPromo('SAVE10');
+                setError(null);
+            }
+        } else if (code === 'EXPIRED10') {
+            setError('Promo code is expired');
+            setPromoDiscount(0);
+            setAppliedPromo('EXPIRED10');
         } else {
             setError('Invalid promo code. Try SAVE10.');
             setPromoDiscount(0);
-            setAppliedPromo('');
+            setAppliedPromo(code);
         }
     };
 

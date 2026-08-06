@@ -8,6 +8,7 @@ function applyPromoCode(total, code){
     if (code === 'EXPIRED10') {
         throw new Error('Promo code is expired');
     }
+    throw new Error('Invalid promo code');
 }
 
 module.exports = {applyPromoCode};
