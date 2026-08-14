@@ -4,16 +4,9 @@ description: ""
 url: http://localhost:5000/api/register
 method: POST
 body:
-  type: json
-  content: "{\r
-
-    \    \"username\": \"testuser\",\r
-
-    \    \"email\":  \"existinguser@gmail.com\",\r
-
-    \    \"password\": \"Password123!\"\r
-
-    }"
+  type: graphql
+  content:
+    query: ""
 scripts:
   - type: afterResponse
     code: "pm.test(\"Status is 500\", function(){\r

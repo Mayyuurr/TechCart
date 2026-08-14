@@ -18,6 +18,12 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
+// In-Memory Mock User Database
+const mockUserDatabase = [
+    { username: 'admin', email: 'admin@email.com', password: 'adminpassword123' },
+    { username: 'existinguser', email: 'existinguser@email.com', password: 'password123' }
+];
+
 app.post('/api/register', async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -122,6 +128,57 @@ app.put('/api/users/:id', (req, res) => {
             password
         }
     });
+});
+
+// 1. INTENTIONALLY VULNERABLE LOGIN ROUTE (For Security Demo)
+app.post('/api/users/login-vulnerable', (req, res) => {
+    const { email, password } = req.body;
+
+    // Simulate MongoDB's object operator processing in your mock database.
+    // If the attacker sends {"$gt": ""}, it evaluates to "always true".
+    const user = mockUserDatabase.find(u => {
+        const emailMatch = (typeof email === 'object' && email['$gt'] !== undefined) 
+            ? u.email > email['$gt'] 
+            : u.email === email;
+
+        const passwordMatch = (typeof password === 'object' && password['$gt'] !== undefined) 
+            ? u.password > password['$gt'] 
+            : u.password === password;
+
+        return emailMatch && passwordMatch;
+    });
+
+    if (user) {
+        return res.status(200).json({
+            success: true,
+            message: "Exploit Successful! Bypassed Auth.",
+            token: "mock-jwt-admin-token"
+        });
+    } else {
+        return res.status(401).json({ success: false, message: "Invalid credentials" });
+    }
+});
+
+// 2. SECURED LOGIN ROUTE (The Fix)
+app.post('/api/users/login-secure', (req, res) => {
+    const { email, password } = req.body;
+
+    // DEFENSIVE REMEDIATION: Strict type verification
+    // Force inputs to be strings. If they are objects, reject them immediately.
+    if (typeof email !== 'string' || typeof password !== 'string') {
+        return res.status(400).json({
+            success: false,
+            message: "Security Alert: Invalid input type detected! Rejected."
+        });
+    }
+
+    const user = mockUserDatabase.find(u => u.email === email && u.password === password);
+
+    if (user) {
+        return res.status(200).json({ success: true, message: "Logged in securely!" });
+    } else {
+        return res.status(401).json({ success: false, message: "Invalid credentials" });
+    }
 });
 
 // Shopping Cart API

@@ -1,0 +1,11 @@
+{
+    "firstname": "John",
+    "email": "john@techcart.com",
+    "isActive": true,
+    "age": 28,
+    "shipping address":{
+        "city": "NewYork",
+        "zipcode": "10001"
+    },
+    "cartitems": ["laptop", "mouse","keyboard"]
+}

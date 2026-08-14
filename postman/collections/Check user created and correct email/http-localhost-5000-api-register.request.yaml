@@ -1,0 +1,37 @@
+$kind: http-request
+name: http://localhost:5000/api/register
+description: ""
+url: http://localhost:5000/api/register
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"username\": \"John\",\r
+
+    \    \"email\": \"john@techcart.com\",\r
+
+    \    \"password\": \"Password123\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Status code should be 201 created\", function(){\r
+
+      \    pm.response.to.have.status(201);\r
+
+      });\r
+
+      \r
+
+      pm.test(\"Response should contain correct email\", function(){\r
+
+      \    var jsonData= pm.response.json();\r
+
+      \r
+
+      \    pm.expect(jsonData.user.email).to.eql(\"john@techcart.com\");\r
+
+      });"
+    language: text/javascript
+order: 1786129732290
