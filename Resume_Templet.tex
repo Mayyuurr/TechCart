@@ -1,0 +1,58 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{enumitem}
+
+\titleformat{\section}{\large\bfseries\MakeUppercase}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{10pt}{5pt}
+\setlist[itemize]{noitemsep, topsep=2pt, leftmargin=15pt}
+
+\begin{document}
+\pagestyle{empty}
+
+%--- Contact Header ---
+\begin{center}
+{\LARGE \textbf{YOUR NAME}} \\
+City, State | (123) 456-7890 | \href{mailto:email@address.com}{email@address.com} \\
+\href{https://linkedin.com/in/yourprofile}{linkedin.com/in/yourprofile} |
+\href{https://github.com/yourprofile}{github.com/yourprofile}
+\end{center}
+
+%--- Technical Skills ---
+\section{Technical Skills Matrix}
+\textbf{Languages:} JavaScript (ES6+), Python, HTML5/CSS3, SQL, NoSQL (MongoDB) \\
+\textbf{Automation:} Cypress.io, Playwright, Selenium WebDriver, Page Object Model \\
+\textbf{API Testing:} Postman, RESTful APIs, JSON Schema Verification, JWT \\
+\textbf{Tools \& Methods:} Agile (Scrum), Git/GitHub, Jira, CI/CD (GitHub Actions), RTM
+
+%--- Technical Projects ---
+\section{QA Engineering Projects}
+\textbf{CineRec Web Automation Framework} \hfill JavaScript, Cypress, Postman, Git
+\begin{itemize}
+\item Architected a modular end-to-end UI testing framework in Cypress.io using Page Object Model
+\item Configured Postman API test collections to automate JSON schema, status code, and
+authentication validations
+\item Integrated automated regression suites into a GitHub Actions CI/CD pipeline, running tests
+on PR triggers
+\end{itemize}
+
+\vspace{0.2cm}
+\textbf{TechCart E-Commerce Staging QA Capstone} \hfill Jira, Traceability, Manual testing
+\begin{itemize}
+\item Analyzed FRS specifications to build a Requirements Traceability Matrix (RTM), ensuring
+100\% specification coverage
+\item Discovered and documented a critical database duplicate email crash (500 Error) and a
+functional calculation bug in Jira
+\item Compiled an executive Test Summary Report outlining defects, pass rates, and a data-backed
+release recommendation
+\end{itemize}
+
+%--- Education ---
+\section{Education \& Certifications}
+\textbf{Bachelor of Science in Computer Science} \hfill Graduation Year \\
+University Name, City, State \\[0.2cm]
+\textbf{Certified Tester Foundation Level (CTFL)} -- License ID: 12345 \hfill ISTQB
+
+\end{document}
