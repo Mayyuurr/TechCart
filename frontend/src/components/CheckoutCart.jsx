@@ -45,14 +45,24 @@ const CheckoutCart = ({ cart, setCart, isPremiumMember }) => {
                 setAppliedPromo('SAVE10');
                 setError(null);
             }
+        } else if (code === 'TECH20') {
+            if (subtotal < 20) {
+                setError('Promo code TECH20 cannot be applied to orders under $20');
+                setPromoDiscount(0);
+                setAppliedPromo('');
+            } else {
+                setPromoDiscount(0.2);
+                setAppliedPromo('TECH20');
+                setError(null);
+            }
         } else if (code === 'EXPIRED10') {
             setError('Promo code is expired');
             setPromoDiscount(0);
-            setAppliedPromo('EXPIRED10');
+            setAppliedPromo('');
         } else {
             setError('Invalid promo code. Try SAVE10.');
             setPromoDiscount(0);
-            setAppliedPromo(code);
+            setAppliedPromo('');
         }
     };
 
@@ -61,7 +71,11 @@ const CheckoutCart = ({ cart, setCart, isPremiumMember }) => {
     const discountedSubtotal = subtotal - discountAmount;
     const tax = discountedSubtotal * 0.1;
     const shipping = (isPremiumMember || discountedSubtotal > 50) ? 0 : 10;
-    const finalTotal = discountedSubtotal + tax + shipping;
+    
+    // Intentionally subtracting tax instead of adding it when a promo code is applied (Checkout Math Bug)
+    const finalTotal = promoDiscount > 0
+        ? (discountedSubtotal - tax + shipping)
+        : (discountedSubtotal + tax + shipping);
 
     const handleCheckout = async () => {
         setError(null);
