@@ -11,6 +11,7 @@
 - [How to Run Locally](#-how-to-run-locally)
   - [Option A: Full-Stack Mode (Recommended)](#option-a-full-stack-mode-recommended)
   - [Option B: Development Mode (Frontend & Backend Separately)](#option-b-development-mode-frontend--backend-separately)
+- [🐞 Intentionally Introduced Bugs & QA Scenarios](#-intentionally-introduced-bugs--qa-scenarios)
 - [API Reference](#-api-reference)
 - [QA & Test Automation Guide](#-qa--test-automation-guide)
   - [1. Backend Unit Tests (Jest)](#1-backend-unit-tests-jest)
@@ -18,6 +19,7 @@
   - [3. Browser Automation (Selenium & TestNG)](#3-browser-automation-selenium--testng)
   - [4. API Testing (Postman)](#4-api-testing-postman)
 - [Demo Credentials & Promo Codes](#-demo-credentials--promo-codes)
+- [Sprint 5 Defect Ledger Summary](#-sprint-5-defect-ledger-summary)
 - [Project Directory Structure](#-project-directory-structure)
 
 ---
@@ -118,6 +120,60 @@ npm run dev
 
 ---
 
+## 🐞 Intentionally Introduced Bugs & QA Scenarios
+
+TechCart includes deliberately crafted defects and edge cases for training and demonstrating real-world QA engineering practices:
+
+### 1. The Duplicate Email Database Crash (API / Unhandled Exception)
+- **Defect ID:** `TCART-102` (Severity: Critical)
+- **How to Reproduce:** Register a new account with the email `existinguser@email.com`.
+- **Observed Behavior:** The backend throws an unhandled duplicate key error, returning a `500 Internal Server Error`. The React UI enters an infinite loading spinner.
+- **QA Learning Objective:** Using Chrome DevTools Network Tab to inspect request payloads, capturing console stack traces, identifying missing error-handling exception paths, and logging reproducible defect reports.
+
+### 2. The Promo Code Math Discrepancy (Functional / Business Logic Bug)
+- **Defect ID:** `TCART-103` (Severity: Major)
+- **How to Reproduce:** Add an item worth $100.00 to the cart and apply promo code `TECH20`.
+- **Expected Calculation:**
+  $$\text{Subtotal (\$80.00 after 20\% off)} + \text{Tax 8\% (\$6.40)} + \text{Shipping (\$10.00)} = \mathbf{\$96.40}$$
+- **Observed Bug:** The backend calculation logic applies the shipping fee twice when a promo code is active, pushing the grand total to **$106.40**.
+- **QA Learning Objective:** Writing boundary and calculation test suites, automating business logic validation via Jest (`mathLogic.test.js`, `promo.test.js`), and defect triage.
+
+### 3. The "Add to Cart" Button Overlap (Cosmetic / Responsive Layout Bug)
+- **Defect ID:** `TCART-104` (Severity: Minor)
+- **How to Reproduce:** Open DevTools, switch to Mobile Device Emulation, and set the viewport width to **375px** (e.g., iPhone SE/XR).
+- **Observed Bug:** Missing responsive flex-wrapping causes the product card description text to overflow and collide with the "Add to Cart" button, violating the 44px tap-target standard.
+- **QA Learning Objective:** Cross-device and mobile viewport testing, inspecting computed CSS properties, and verifying accessibility/UX guidelines.
+
+### 4. Brittle Test Selector & Maintenance Overhead (Automation Flakiness)
+- **File:** `frontend/cypress/e2e/broken-test.cy.js`
+- **Observed Bug:** The automated test is hardcoded to click `#register-btn-v1`, but the UI element was updated to `#register-btn-v2`.
+- **QA Learning Objective:** Demonstrating test suite brittleness, diagnosing NoSuchElementException / locator timeout errors, and adopting resilient locator strategies (`data-testid`, semantic roles).
+
+### 5. NoSQL Object Injection Vulnerability (Security Testing Demo)
+- **Endpoints:** `POST /api/users/login-vulnerable` vs `POST /api/users/login-secure`
+- **Exploit Payload:**
+  ```json
+  {
+    "email": { "$gt": "" },
+    "password": { "$gt": "" }
+  }
+  ```
+- **Observed Bug:** On the vulnerable endpoint, object operators evaluate to `true` against the database query, completely bypassing credential verification.
+- **QA Learning Objective:** API penetration testing, parameter tampering, and verifying defensive programming (strict string type verification in `login-secure`).
+
+### 6. Simulated Heavy Database Bottleneck (Performance Testing)
+- **Endpoint:** `GET /api/products/heavy-search`
+- **Behavior:** Intentionally delays the response by 1,500ms using asynchronous timeouts to simulate an unindexed full-table scan.
+- **QA Learning Objective:** Measuring SLA thresholds, response time metrics, and writing API performance assertions in Postman.
+
+### 7. Order Quantity Boundaries (Equivalence Partitioning)
+- **Rule:** A maximum of 10 identical items per order is allowed.
+- **Boundary Cases:**
+  - 10 items $\rightarrow$ `200 OK` (Valid boundary)
+  - 11 items $\rightarrow$ `400 Bad Request: "Cannot purchase more than 10 of the same item."` (Invalid boundary)
+
+---
+
 ## 🔌 API Reference
 
 ### Products
@@ -130,8 +186,8 @@ npm run dev
 ### Authentication & Users
 | Method | Endpoint | Description |
 |---|---|---|
-| `POST` | `/api/register` | User registration with duplicate email validation |
-| `POST` | `/api/users` | User registration endpoint |
+| `POST` | `/api/register` | User registration with duplicate email validation simulation |
+| `POST` | `/api/users` | Standard user login/registration endpoint |
 | `PUT` | `/api/users/:id` | Update user details |
 | `POST` | `/api/users/login-vulnerable` | Intentionally vulnerable route for NoSQL injection demo |
 | `POST` | `/api/users/login-secure` | Secured login route with strict type verification |
@@ -147,7 +203,7 @@ npm run dev
 ## 🧪 QA & Test Automation Guide
 
 ### 1. Backend Unit Tests (Jest)
-Runs unit tests for math calculations, checkout logic, and promo code verification.
+Runs unit tests for math calculations, checkout logic, and promo code verification:
 ```bash
 cd backend
 npm test
@@ -166,7 +222,7 @@ npx cypress run
 ```
 
 ### 3. Browser Automation (Selenium & TestNG)
-Make sure Java JDK and Maven are installed and the backend server is running on `http://localhost:5000`.
+Make sure Java JDK and Maven are installed and the backend server is running on `http://localhost:5000`:
 ```bash
 cd selenium-tests
 mvn clean test
@@ -192,6 +248,16 @@ mvn clean test
 
 ---
 
+## 📊 Sprint 5 Defect Ledger Summary
+
+| Defect ID | Severity | Priority | Description | Resolution Status |
+|---|---|---|---|---|
+| **TCART-102** | Critical | High | Duplicate registration unhandled 500 error & frozen UI | Unresolved (Demo Bug) |
+| **TCART-103** | Major | High | Promo code `TECH20` doubles flat shipping charge | Unresolved (Demo Bug) |
+| **TCART-104** | Minor | Medium | 375px responsive mobile "Add to Cart" button overlap | Unresolved (Demo Bug) |
+
+---
+
 ## 📁 Project Directory Structure
 
 ```text
@@ -204,13 +270,15 @@ TechCart/
 ├── frontend/
 │   ├── src/                   # React components, pages & styles
 │   ├── public/                # Static images & assets
-│   ├── cypress/               # Cypress E2E test specs
+│   ├── cypress/               # Cypress E2E test specs (including brittle tests)
 │   ├── vite.config.js         # Vite configuration (builds to /build)
 │   └── package.json           # Frontend dependencies & scripts
 ├── selenium-tests/
 │   ├── pom.xml                # Maven configuration for Selenium + TestNG
 │   └── src/test/java/         # Selenium test classes
 ├── postman/                   # Postman collections, environments & flows
+├── TechCart_Sprint5_Test_Summary_Report.md # QA Sprint Test Summary Report
+├── techcart-specifications-v1-2.md         # System BRD & FRS specifications
 ├── package.json               # Root package script runner
-└── README.md                  # Project documentation
+└── README.md                  # Project documentation & testing guide
 ```
