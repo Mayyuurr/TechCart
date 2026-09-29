@@ -11,3 +11,10 @@ body {
   color: #fff;
   min-height: 100vh;
 }
+
+/* Intentionally buggy responsive styling causing Add to Cart button to overlap the description */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .buggy-overlap-desc {
+    margin-bottom: -40px !important;
+  }
+}
