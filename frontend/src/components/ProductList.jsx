@@ -68,7 +68,7 @@ const ProductList = ({ addToCart }) => {
                         {/* Content Container */}
                         <div className="p-6 flex flex-col flex-grow">
                             <h3 className="text-2xl font-medium mb-2 tracking-wide">{product.name}</h3>
-                            <p className="text-white/70 text-sm font-light mb-6 flex-grow leading-relaxed">{product.description}</p>
+                            <p className="text-white/70 text-sm font-light mb-6 flex-grow leading-relaxed buggy-overlap-desc">{product.description}</p>
                             
                             <button 
                                 onClick={() => addToCart(product)}

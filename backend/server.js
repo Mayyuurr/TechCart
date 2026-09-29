@@ -57,7 +57,7 @@ app.post('/api/register', async (req, res) => {
 
 // A simple product listing endpoint
 const productsList = [
-    { id: 1, productId: 1, name: 'Smartphone', price: 699, category: 'electronics', inStock: true, description: 'Latest model smartphone', image: '/images/smartphone.png' },
+    { id: 1, productId: 1, name: 'Smartphone', price: 100, category: 'electronics', inStock: true, description: 'Latest model smartphone', image: '/images/smartphone.png' },
     { id: 9942, productId: 9942, name: 'Laptop', price: 1299, category: 'electronics', inStock: true, description: 'High performance laptop', image: '/images/laptop.png' },
     { id: 3, productId: 3, name: 'Wireless Earbuds', price: 149, category: 'accessories', inStock: true, description: 'Noise cancelling earbuds', image: '/images/earbuds.png' },
     { id: 4, productId: 4, name: 'Smartwatch', price: 299, category: 'accessories', inStock: false, description: 'Fitness tracking smartwatch', image: '/images/smartwatch.png' }
@@ -108,7 +108,7 @@ app.post('/api/users', (req, res) => {
         return res.status(400).json({ error: 'Email and password are required' });
     }
     res.status(201).json({
-        message: 'User created successfully',
+        message: 'User Login successfully',
         user: {
             id: 'mock-user-id',
             email
