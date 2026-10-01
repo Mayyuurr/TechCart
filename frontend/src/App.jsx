@@ -30,18 +30,21 @@ function App() {
         <h1 className="text-2xl font-bold text-white tracking-wider">TechCart <span className="font-light">QA</span></h1>
         <div className="space-x-4">
           <button 
+            data-cy="nav-register"
             onClick={() => setCurrentTab('register')}
             className={`font-medium px-4 py-2 rounded-full transition-all duration-300 ${currentTab === 'register' ? 'bg-white/30 shadow-inner' : 'hover:bg-white/20'}`}
           >
             Register
           </button>
           <button 
+            data-cy="nav-products"
             onClick={() => setCurrentTab('products')}
             className={`font-medium px-4 py-2 rounded-full transition-all duration-300 ${currentTab === 'products' ? 'bg-white/30 shadow-inner' : 'hover:bg-white/20'}`}
           >
             Products
           </button>
           <button 
+            data-cy="nav-cart"
             onClick={() => setCurrentTab('cart')}
             className={`font-medium px-4 py-2 rounded-full transition-all duration-300 ${currentTab === 'cart' ? 'bg-white/30 shadow-inner' : 'hover:bg-white/20'}`}
           >

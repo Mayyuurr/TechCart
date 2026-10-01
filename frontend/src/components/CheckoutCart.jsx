@@ -179,7 +179,7 @@ const CheckoutCart = ({ cart, setCart, isPremiumMember }) => {
                     {/* Price Breakdown Preview */}
                     <div className="bg-white/5 p-6 rounded-2xl border border-white/10 space-y-3">
                         <h3 className="font-medium text-lg mb-4">Order Summary</h3>
-                        <div className="flex justify-between text-sm text-white/80">
+                        <div data-cy="cart-subtotal" className="flex justify-between text-sm text-white/80">
                             <span>Subtotal:</span>
                             <span>${subtotal}</span>
                         </div>
@@ -217,6 +217,7 @@ const CheckoutCart = ({ cart, setCart, isPremiumMember }) => {
                     </button>
                     
                     <button 
+                        data-cy="checkout-btn"
                         onClick={handleCheckout}
                         className="bg-blue-500 hover:bg-blue-600 transition shadow-lg shadow-blue-500/30 text-white px-8 py-3 rounded-full font-medium"
                         id="checkout-btn-v2"
@@ -262,7 +263,7 @@ const CheckoutCart = ({ cart, setCart, isPremiumMember }) => {
             )}
 
             {checkoutResult && (
-                <div className="mt-8 p-6 bg-green-500/10 backdrop-blur-md border border-green-400/30 rounded-2xl">
+                <div data-cy="order-success-msg" className="mt-8 p-6 bg-green-500/10 backdrop-blur-md border border-green-400/30 rounded-2xl">
                     <h3 className="text-2xl font-light text-green-300 mb-4">Order Confirmed!</h3>
                     <div className="space-y-2 text-white/90">
                         <p className="flex justify-between"><span>Subtotal:</span> <span className="font-medium">${checkoutResult.rawTotal}</span></p>
